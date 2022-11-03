@@ -48,32 +48,19 @@ const OpenChat = () => {
   }, [socket, userData])
 
   function receiveMessage(newChat) {
-    console.log(userData.data.chats)
-    console.log(
-      `shalom`,
-      userData.data.chats.find(chat => chat.chatId === newChat.chatId)
-    )
+    console.log(newChat)
+    let trigger = true
+    userData.data.chats.forEach((chat, i) => {
+      if (chat.members.every(member => newChat.members.includes(member))) {
+        dispatch(updateChat({ newChat: newChat, index: i }))
+        trigger = false
+      }
+    })
 
-    console.log(`new`, newChat.chatId)
-    if (userData.data.chats.length === 0) {
-      console.log(`pushChat`)
+    if (trigger) {
       dispatch(pushChat(newChat))
-    } else if (
-      userData.data.chats.find(chat => chat.chatId === newChat.chatId) === undefined
-    ) {
-      console.log(`bob`, `pushChat`)
-      dispatch(pushChat(newChat))
-    } else if (userData.data.chats.find(chat => chat.chatId === newChat.chatId)) {
-      userData.data.chats.map((chat, i) => {
-        if (chat.chatId === newChat.chatId) {
-          console.log(`currrent`, chat.chatId)
-          console.log(`new`, newChat.chatId)
-          console.log(`updateChat`)
-
-          dispatch(updateChat({ newChat: newChat, index: i }))
-        }
-      })
     }
+    trigger = true
   }
 
   const setRef = useCallback(node => {

@@ -37,7 +37,7 @@ const userSlice = createSlice({
       },
     },
     updateChat: (state, action) => {
-      state.data.chats[action.payload.index] = action.payload.newChat
+      state.data.chats[action.payload.index].messages = action.payload.newChat.messages
     },
     pushChat: (state, action) => {
       state.data.chats.unshift(action.payload)
